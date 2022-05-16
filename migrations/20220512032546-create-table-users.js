@@ -17,9 +17,10 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: true,
          },
-         avatar: {
-            type: Sequelize.STRING,
-            allowNull: true,
+         gender: {
+            type: Sequelize.ENUM,
+            values: ["laki-laki", "perempuan"],
+            allowNull: false,
          },
          email: {
             type: Sequelize.STRING,
@@ -39,8 +40,9 @@ module.exports = {
          },
       });
 
-      await queryInterface.addConstraint("users", ["email"], {
+      await queryInterface.addConstraint("users", {
          type: "unique",
+         fields: ["email"],
          name: "UNIQUE_USERS_EMAIL",
       });
    },
