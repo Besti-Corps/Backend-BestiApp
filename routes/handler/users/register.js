@@ -19,4 +19,34 @@ module.exports = async (req, res) => {
          message: validate,
       });
    }
+
+   const user = await User.findOne({
+      where: { email: req.body.email },
+   });
+
+   if (user) {
+      return res.status(409).json({
+         status: "error",
+         message: "email already exists",
+      });
+   }
+
+   const password = await bcrypt.hash(req.body.password, 15);
+
+   const data = {
+      password,
+      name: req.body.name,
+      email: req.body.email,
+      profession: req.body.profession,
+      gender: req.body.gender,
+   };
+
+   const userRegist = await User.create(data);
+
+   return res.json({
+      status: "success",
+      data: {
+         id: userRegist.id,
+      },
+   });
 };
