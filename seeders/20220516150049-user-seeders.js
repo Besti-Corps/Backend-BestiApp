@@ -10,6 +10,7 @@ module.exports = {
                name: "John Doe",
                profession: "Engineer",
                gender: "laki-laki",
+               phone: "081213345645",
                email: "besti@gmail.com",
                password: await bcrypt.hash("besti", 15),
                created_at: new Date(),
@@ -18,7 +19,8 @@ module.exports = {
             {
                name: "Doe",
                profession: "Mahasiswa",
-               gender: "laki-laki",
+               gender: "perempuan",
+               phone: "081213346768",
                email: "corps@gmail.com",
                password: await bcrypt.hash("besti", 15),
                created_at: new Date(),

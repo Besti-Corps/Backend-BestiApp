@@ -22,6 +22,10 @@ module.exports = {
             values: ["laki-laki", "perempuan"],
             allowNull: false,
          },
+         phone: {
+            type: Sequelize.STRING,
+            allowNull: true,
+         },
          email: {
             type: Sequelize.STRING,
             allowNull: false,
