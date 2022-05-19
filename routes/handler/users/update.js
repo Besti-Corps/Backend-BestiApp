@@ -7,7 +7,11 @@ module.exports = async (req, res) => {
    const schema = {
       name: "string|empty:false",
       email: "email|empty:false",
-      gender: { type: "enum", values: ["laki-laki", "perempuan"] },
+      gender: {
+         type: "enum",
+         values: ["laki-laki", "perempuan"],
+         optional: true,
+      },
       password: "string|min:6",
       profession: "string|optional",
    };
@@ -20,5 +24,50 @@ module.exports = async (req, res) => {
       });
    }
 
-   const id = req;
+   const id = req.params.id;
+   const user = await User.findByPk(id);
+   if (!user) {
+      return res.status(404).json({
+         status: "error",
+         message: "User not found",
+      });
+   }
+
+   const email = req.body.email;
+   if (email) {
+      const checkEmail = await User.findOne({
+         where: { email },
+      });
+
+      if (checkEmail && email !== user.email) {
+         return res.status(409).json({
+            status: "error",
+            message: "Email already exists",
+         });
+      }
+   }
+
+   const password = await bcrypt.hash(req.body.password, 15);
+   const { name, profession, phone, gender } = req.body;
+
+   await user.update({
+      email,
+      password,
+      name,
+      profession,
+      phone,
+      gender,
+   });
+
+   return res.json({
+      status: "succes",
+      data: {
+         id: user.id,
+         name,
+         email,
+         profession,
+         phone,
+         gender,
+      },
+   });
 };
