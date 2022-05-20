@@ -1,7 +1,14 @@
 const bcrypt = require("bcrypt");
-const { User } = require("../../../models");
+const { User, RefreshToken } = require("../../../models");
 const validator = require("fastest-validator");
+const jwt = require("jsonwebtoken");
 const v = new validator();
+const {
+   JWT_SECRET,
+   JWT_SECRET_REFRESH_TOKEN,
+   JWT_ACCESS_TOKEN_EXPIRED,
+   JWT_REFRESH_TOKEN_EXPIRED,
+} = process.env;
 
 module.exports = async (req, res) => {
    const schema = {
@@ -36,14 +43,32 @@ module.exports = async (req, res) => {
       });
    }
 
-   res.json({
+   const data = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      gender: user.gender,
+      profession: user.profession,
+      phone: user.phone,
+   };
+
+   const token = jwt.sign({ data }, JWT_SECRET, {
+      expiresIn: JWT_ACCESS_TOKEN_EXPIRED,
+   });
+
+   const refreshToken = jwt.sign({ data }, JWT_SECRET_REFRESH_TOKEN, {
+      expiresIn: JWT_REFRESH_TOKEN_EXPIRED,
+   });
+
+   await RefreshToken.create({
+      token: refreshToken,
+      user_id: user.id,
+   });
+
+   return res.json({
       status: "success",
       data: {
-         id: user.id,
-         name: user.name,
-         email: user.email,
-         gender: user.gender,
-         profession: user.profession,
+         token,
       },
    });
 };

@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       });
    }
 
-   const id = req.params.id;
+   const id = req.user.data.id;
    const user = await User.findByPk(id);
    if (!user) {
       return res.status(404).json({

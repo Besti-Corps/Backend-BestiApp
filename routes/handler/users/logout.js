@@ -1,7 +1,7 @@
 const { User, RefreshToken } = require("../../../models");
 
 module.exports = async (req, res) => {
-   const userId = req.body.user_id;
+   const userId = req.user.data.id;
    const user = await User.findByPk(userId);
 
    if (!user) {
