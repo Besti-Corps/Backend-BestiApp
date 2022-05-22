@@ -6,6 +6,7 @@ const v = new Validator();
 module.exports = async (req, res) => {
    const schema = {
       name: "string|empty:false",
+      gender: "string|empty:false",
       email: "email|empty:false",
       password: "string|min:6",
       profession: "string|optional",

@@ -17,6 +17,6 @@ module.exports = async (req, res) => {
 
    return res.json({
       status: "success",
-      message: "Token deleted",
+      message: "logout successfully",
    });
 };
