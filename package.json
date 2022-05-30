@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@tensorflow/tfjs-node": "^3.18.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -14,6 +15,7 @@
     "fastest-validator": "^1.12.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
+    "multer": "^1.4.4-lts.1",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.16",
     "sequelize": "^6.19.0",
