@@ -1,9 +1,8 @@
+require("dotenv").config();
+const { ModelPredictML } = process.env;
 const tf = require("@tensorflow/tfjs-node");
 
 module.exports = async (req, res) => {
-   const models =
-      "https://raw.githubusercontent.com/Besti-Corps/MachineLearning-BestiApp/main/Model/JSON/model.json";
-
    const image = req.file;
 
    if (!image) {
@@ -19,7 +18,7 @@ module.exports = async (req, res) => {
    }
 
    const tensor = tf.node.decodeImage(image.buffer);
-   const loadModel = await tf.loadGraphModel(models);
+   const loadModel = await tf.loadGraphModel(ModelPredictML);
 
    const prediction = loadModel.predict(
       tensor.resizeBilinear(imageSize).expandDims(0)
@@ -45,16 +44,43 @@ module.exports = async (req, res) => {
       .map((predict, index) => {
          return {
             label: label[index],
-            value: Math.round(predict * 100),
+            accuracy: Math.round(predict * 100),
          };
       })
       .sort(function (a, b) {
-         return b.value - a.value;
+         return b.accuracy - a.accuracy;
       })
       .slice(0, 1);
 
+   let typeTrash;
+   switch (result[0].label) {
+      case "Biological":
+         typeTrash = "Organik";
+         break;
+      case "Plastic":
+      case "Metal":
+      case "Shoes":
+      case "Clothes":
+         typeTrash = "Anorganik";
+         break;
+      case "Battery":
+      case "Brown Glass":
+      case "White Glass":
+      case "Green Glass":
+         typeTrash = "B3";
+         break;
+      case "Paper":
+      case "Cardboard":
+         typeTrash = "Kertas";
+         break;
+      default:
+         typeTrash = "Residu";
+         break;
+   }
+
    return res.json({
       status: "success",
-      data: result,
+      predict: result,
+      type: typeTrash,
    });
 };
