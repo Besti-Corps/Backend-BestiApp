@@ -19,10 +19,9 @@ module.exports = async (req, res) => {
    }
 
    const tensor = tf.node.decodeImage(image.buffer);
-   const model = await tf.loadGraphModel(models);
-   console.log(model);
+   const loadModel = await tf.loadGraphModel(models);
 
-   const prediction = model.predict(
+   const prediction = loadModel.predict(
       tensor.resizeBilinear(imageSize).expandDims(0)
    );
 
@@ -46,7 +45,7 @@ module.exports = async (req, res) => {
       .map((predict, index) => {
          return {
             label: label[index],
-            value: predict,
+            value: Math.round(predict * 100),
          };
       })
       .sort(function (a, b) {
