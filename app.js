@@ -8,6 +8,7 @@ const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const refreshTokenRouter = require("./routes/refreshToken");
 const machineLearning = require("./routes/predict");
+const userReview = require("./routes/review");
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/token", refreshTokenRouter);
 app.use("/predict", machineLearning);
+app.use("/review", userReview);
 
 module.exports = app;
